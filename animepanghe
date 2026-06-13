@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimePanghe - Watch Anime Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 77, 109, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff4d6d, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 300px;
+            margin: 0 2rem;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 77, 109, 0.5);
+            border-radius: 25px;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-container input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #ff4d6d;
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.3);
+        }
+
+        .search-container input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1.5rem;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #ff4d6d;
+        }
+
+        .featured-section {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(123, 44, 191, 0.2), rgba(255, 77, 109, 0.2));
+            border-bottom: 2px solid rgba(255, 77, 109, 0.3);
+            overflow: hidden;
+        }
+
+        .featured-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .featured-image {
+            flex: 0 0 200px;
+            height: 280px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(255, 77, 109, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .featured-image:hover {
+            transform: scale(1.05);
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-info {
+            flex: 1;
+        }
+
+        .featured-info h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ff4d6d;
+        }
+
+        .featured-info .rating {
+            color: #ffd60a;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .featured-info p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+        }
+
+        .watch-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(90deg, #ff4d6d, #ff6b8a);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .watch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.4);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(90deg, #ff4d6d, #7b2cbf);
+            border-radius: 2px;
+        }
+
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .anime-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            group: hover;
+            transition: all 0.3s;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .anime-card-image {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+            background: #1a1f3a;
+        }
+
+        .anime-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .anime-card:hover .anime-card-image img {
+            transform: scale(1.1);
+            filter: brightness(0.7);
+        }
+
+        .anime-card-info {
+            background: rgba(20, 25, 45, 0.95);
+            padding: 1rem;
+            border: 1px solid rgba(255, 77, 109, 0.2);
+            border-top: none;
+        }
+
+        .anime-card-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #ff4d6d;
+        }
+
+        .anime-card-rating {
+            color: #ffd60a;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 50px;
+            height: 50px;
+            background: #ff4d6d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+            font-size: 1.5rem;
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .anime-card:hover .play-button {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .lol-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .lol-modal.show {
+            display: flex;
+        }
+
+        .rickroll-container {
+            position: relative;
+            width: 90%;
+            max-width: 700px;
+            background: linear-gradient(45deg, #ff4d6d, #7b2cbf);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 100px rgba(255, 77, 109, 0.8);
+            animation: rickroll-jumpscare 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes rickroll-jumpscare {
+            0% {
+                transform: scale(0.1) rotate(-20deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.15);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .rickroll-video {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border: none;
+            display: block;
+            background: #000;
+            font-size: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff4d6d;
+            font-weight: 900;
+        }
+
+        .rickroll-jumpscare-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff4d6d, #7b2cbf, #ff4d6d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rickroll-shake 0.1s infinite;
+            z-index: 10;
+            text-shadow: 0 0 20px rgba(255, 77, 109, 0.8);
+        }
+
+        @keyframes rickroll-shake {
+            0%, 100% { transform: translate(-50%, -50%) rotate(-2deg); }
+            25% { transform: translate(-48%, -52%) rotate(2deg); }
+            50% { transform: translate(-52%, -50%) rotate(-2deg); }
+            75% { transform: translate(-50%, -48%) rotate(2deg); }
+        }
+
+        .rickroll-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .rickroll-close:hover {
+            background: #ff6b8a;
+            transform: scale(1.1);
+        }
+
+        footer {
+            background: rgba(10, 14, 39, 0.95);
+            border-top: 1px solid rgba(255, 77, 109, 0.3);
+            padding: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2rem;
+        }
+
+        .comments-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background: rgba(20, 25, 45, 0.5);
+            border-top: 2px solid rgba(255, 77, 109, 0.3);
+        }
+
+        .comments-container {
+            max-width: 600px;
+        }
+
+        .comments-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: #ff4d6d;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .comments-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(90deg, #ff4d6d, #7b2cbf);
+            border-radius: 2px;
+        }
+
+        .comment-input-box {
+            background: rgba(10, 14, 39, 0.7);
+            border: 1px solid rgba(255, 77, 109, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .comment-input-box textarea {
+            width: 100%;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 77, 109, 0.3);
+            border-radius: 8px;
+            color: white;
+            padding: 1rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            outline: none;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .comment-input-box textarea:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #ff4d6d;
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.2);
+        }
+
+        .comment-input-box textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .comment-name-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 77, 109, 0.3);
+            border-radius: 8px;
+            color: white;
+            padding: 0.8rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .comment-name-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #ff4d6d;
+        }
+
+        .comment-name-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .submit-comment-btn {
+            background: linear-gradient(90deg, #ff4d6d, #ff6b8a);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .submit-comment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.4);
+        }
+
+        .comments-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .comment-item {
+            background: rgba(10, 14, 39, 0.7);
+            border: 1px solid rgba(255, 77, 109, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .comment-author {
+            color: #ff4d6d;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-time {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .comment-text {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">AnimePanghe</div>
+        <div class="search-container">
+            <input type="text" placeholder="Search anime..." id="searchInput" onkeyup="searchAnime()">
+        </div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Trending</a>
+            <a href="#">Popular</a>
+        </nav>
+    </div>
+</header>
+
+<div class="featured-section">
+    <div class="featured-content" id="featuredContent">
+        <!-- Featured anime will be loaded here -->
+    </div>
+</div>
+
+<div class="container">
+    <h2 class="section-title">Trending Now</h2>
+    <div class="anime-grid" id="animeGrid">
+        <!-- Anime cards will be generated here -->
+    </div>
+</div>
+
+<div class="lol-modal" id="lolModal">
+    <div class="rickroll-container">
+        <button class="rickroll-close" onclick="closeRickroll()">✕</button>
+        <div class="rickroll-video">
+            <div class="rickroll-jumpscare-text">🎵 RICKROLL! 🎵</div>
+        </div>
+    </div>
+</div>
+
+<div class="comments-section">
+    <div class="comments-container">
+        <h2 class="comments-title">Community Comments</h2>
+        
+        <div class="comment-input-box">
+            <input type="text" id="commentName" class="comment-name-input" placeholder="Your name...">
+            <textarea id="commentText" placeholder="Share your thoughts about anime..."></textarea>
+            <button class="submit-comment-btn" onclick="submitComment()">Post Comment</button>
+        </div>
+
+        <div class="comments-list" id="commentsList">
+            <div class="no-comments">No comments yet. Be the first to share!</div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 AnimePanghe. All Rights Reserved. | Your Ultimate Anime Universe</p>
+</footer>
+
+<script>
+    const animeList = [
+        { title: "Demon Slayer", rating: "9.1/10", desc: "Epic sword-wielding adventures in a world filled with demons", img: "https://cdn.myanimelist.net/images/anime/12/93642l.jpg" },
+        { title: "Naruto", rating: "7.9/10", desc: "Journey of a legendary ninja seeking recognition", img: "https://cdn.myanimelist.net/images/anime/13/17405l.jpg" },
+        { title: "One Piece", rating: "8.7/10", desc: "Adventure on the grand seas searching for treasure", img: "https://cdn.myanimelist.net/images/anime/6/73245l.jpg" },
+        { title: "Attack on Titan", rating: "8.9/10", desc: "Humanity's fight against giant titans", img: "https://cdn.myanimelist.net/images/anime/10/47347l.jpg" },
+        { title: "Death Note", rating: "8.6/10", desc: "Psychological thriller with supernatural abilities", img: "https://cdn.myanimelist.net/images/anime/9/55412l.jpg" },
+        { title: "Fullmetal Alchemist", rating: "9.0/10", desc: "Alchemy and brotherhood in a military state", img: "https://cdn.myanimelist.net/images/anime/1/75225l.jpg" },
+        { title: "Bleach", rating: "7.6/10", desc: "Soul reapers battle against dark forces", img: "https://cdn.myanimelist.net/images/anime/4/88071l.jpg" },
+        { title: "Steins;Gate", rating: "9.0/10", desc: "Time travel mystery and scientific adventure", img: "https://cdn.myanimelist.net/images/anime/4/39911l.jpg" },
+        { title: "My Hero Academia", rating: "8.3/10", desc: "Heroes in training with superpowers", img: "https://cdn.myanimelist.net/images/anime/10/87258l.jpg" },
+        { title: "Jujutsu Kaisen", rating: "8.8/10", desc: "Cursed spirits and dark sorcery", img: "https://cdn.myanimelist.net/images/anime/1/93009l.jpg" },
+        { title: "Sword Art Online", rating: "7.5/10", desc: "Trapped in a virtual world of adventure", img: "https://cdn.myanimelist.net/images/anime/8/45652l.jpg" },
+        { title: "Dragon Ball Z", rating: "8.8/10", desc: "Ultimate power fights and transformations", img: "https://cdn.myanimelist.net/images/anime/5/39254l.jpg" },
+        { title: "Mob Psycho 100", rating: "8.6/10", desc: "Supernatural comedy with psychic powers", img: "https://cdn.myanimelist.net/images/anime/7/84324l.jpg" },
+        { title: "Spy x Family", rating: "8.8/10", desc: "Undercover family on secret missions", img: "https://cdn.myanimelist.net/images/anime/5/88769l.jpg" },
+        { title: "Chainsaw Man", rating: "8.5/10", desc: "Dark action with demonic contracts", img: "https://cdn.myanimelist.net/images/anime/1/96134l.jpg" }
+    ];
+
+    function displayFeatured() {
+        const featured = animeList[Math.floor(Math.random() * animeList.length)];
+        document.getElementById("featuredContent").innerHTML = `
+            <div class="featured-image" onclick="showLOL()">
+                <img src="${featured.img}" alt="${featured.title}">
+                <div class="play-button">▶</div>
+            </div>
+            <div class="featured-info">
+                <h2>${featured.title}</h2>
+                <div class="rating">${featured.rating}</div>
+                <p>${featured.desc}</p>
+                <button class="watch-btn" onclick="showLOL()">▶ Watch Now</button>
+            </div>
+        `;
+    }
+
+    function displayAllAnime() {
+        const grid = document.getElementById("animeGrid");
+        grid.innerHTML = "";
+        
+        animeList.forEach(anime => {
+            const card = document.createElement("div");
+            card.className = "anime-card";
+            card.innerHTML = `
+                <div class="anime-card-image">
+                    <img src="${anime.img}" alt="${anime.title}">
+                    <div class="play-button" onclick="showLOL()">▶</div>
+                </div>
+                <div class="anime-card-info">
+                    <div class="anime-card-title">${anime.title}</div>
+                    <div class="anime-card-rating">${anime.rating}</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function searchAnime() {
+        const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+        const grid = document.getElementById("animeGrid");
+        grid.innerHTML = "";
+        
+        const filtered = animeList.filter(anime => 
+            anime.title.toLowerCase().includes(searchTerm) ||
+            anime.desc.toLowerCase().includes(searchTerm)
+        );
+        
+        if (filtered.length === 0 && searchTerm !== "") {
+            grid.innerHTML = "<div style='grid-column: 1/-1; text-align: center; padding: 2rem;'>No anime found</div>";
+            return;
+        }
+        
+        const toDisplay = searchTerm === "" ? animeList : filtered;
+        
+        toDisplay.forEach(anime => {
+            const card = document.createElement("div");
+            card.className = "anime-card";
+            card.innerHTML = `
+                <div class="anime-card-image">
+                    <img src="${anime.img}" alt="${anime.title}">
+                    <div class="play-button" onclick="showLOL()">▶</div>
+                </div>
+                <div class="anime-card-info">
+                    <div class="anime-card-title">${anime.title}</div>
+                    <div class="anime-card-rating">${anime.rating}</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function showLOL() {
+        playJumpscareSound();
+    }
+
+    function closeRickroll() {
+        const modal = document.getElementById("lolModal");
+        modal.classList.remove("show");
+    }
+
+    function playJumpscareSound() {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.2)
+        const iframe = modal.querySelector("iframe");
+        iframe.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=1";
+    }
+
+    // Comments functionality
+    function loadComments() {
+        const comments = JSON.parse(localStorage.getItem("animeComments")) || [];
+        const commentsList = document.getElementById("commentsList");
+        
+        if (comments.length === 0) {
+            commentsList.innerHTML = "<div class='no-comments'>No comments yet. Be the first to share!</div>";
+            return;
+        }
+        
+        commentsList.innerHTML = "";
+        comments.reverse().forEach(comment => {
+            const commentItem = document.createElement("div");
+            commentItem.className = "comment-item";
+            const time = new Date(comment.timestamp).toLocaleDateString();
+            commentItem.innerHTML = `
+                <div class="comment-author">${comment.name || "Anonymous"}</div>
+                <div class="comment-time">${time}</div>
+                <div class="comment-text">${comment.text}</div>
+            `;
+            commentsList.appendChild(commentItem);
+        });
+    }
+
+    function submitComment() {
+        const name = document.getElementById("commentName").value.trim();
+        const text = document.getElementById("commentText").value.trim();
+        
+        if (!text) {
+            alert("Please write a comment!");
+            return;
+        }
+        
+        const comments = JSON.parse(localStorage.getItem("animeComments")) || [];
+        comments.push({
+            name: name || "Anonymous",
+            text: text,
+            timestamp: new Date().toISOString()
+        });
+        
+        localStorage.setItem("animeComments", JSON.stringify(comments));
+        
+        document.getElementById("commentName").value = "";
+        document.getElementById("commentText").value = "";
+        
+        loadComments();
+    }
+
+    // Load on page load
+    window.addEventListener("load", () => {
+        displayFeatured();
+        displayAllAnime();
+        loadComments();
+    });
+</script>
+
+</body>
+</html>
